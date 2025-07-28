@@ -87,7 +87,7 @@ const vatNatures: { value: NaturaIVA; label: string }[] = [
   { value: "N7", label: "Esenti" },
 ];
 
-export function InvoiceForm() {
+export function InvoiceForm({ onSubmit: customOnSubmit }: { onSubmit?: (data: InvoiceFormData) => void } = {}) {
   const form = useForm<InvoiceFormData>({
     resolver: zodResolver(invoiceSchema),
     defaultValues: {
@@ -137,7 +137,11 @@ export function InvoiceForm() {
 
   const onSubmit = (data: InvoiceFormData) => {
     console.log("Invoice data:", data);
-    toast.success("Fattura generata con successo!");
+    if (customOnSubmit) {
+      customOnSubmit(data);
+    } else {
+      toast.success("Fattura generata con successo!");
+    }
   };
 
   const addLineItem = () => {
